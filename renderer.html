@@ -1,0 +1,216 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8" />
+	<title>The Backrooms</title>
+	<style>
+		@font-face {
+			font-family: "Special Elite";
+			font-weight: 400;
+			src: url("assets/font.ttf") format("truetype");
+		}
+		body {
+			margin: 0;
+			overflow: hidden;
+			font-family: "Special Elite";
+			color: white;
+			user-select: none;
+		}
+		#main {
+			position: absolute;
+			right: 50vw;
+			top: 50vh;
+			transform: translateY(-50%);
+		}
+		#title {
+			font-size: 50px;
+		}
+		#menu {
+			font-size: 30px;
+		}
+		#menu > tbody > tr > td {
+			padding: 20px;
+			cursor: pointer;
+		}
+		#menu > tbody > tr > td:hover {
+			background: #fff8;
+		}
+		.fullscreen {
+			width: calc(100vw - 40px);
+			height: calc(100vh - 40px);
+			position: absolute;
+			top: 0;
+			left: 0;
+			background-image: url("assets/pictures/menu wallpaper.png");
+			background-position: center;
+			background-size: cover;
+			padding: 20px;
+			z-index: 99;
+		}
+		body.fullscreen {
+			position: static;
+		}
+		button, input[type=button], input[type=submit] {
+			background: black;
+			color: white;
+			padding: 10px;
+			border: solid 2.5px black;
+			font: inherit;
+		}
+		.button-row button {
+			zoom: var(--zoom);
+		}
+		button:hover, input[type=button]:hover, input[type=submit]:hover {
+			border-color: white;
+		}
+		.button-row {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: calc(100vw - 40px);
+			padding: 20px;
+			background: linear-gradient(0, #0008, transparent);
+			text-align: center;
+		}
+		#select-world {
+			padding: 0;
+			margin: 0;
+			max-height: 50vh;
+			overflow: auto;
+			width: calc(100vw - 40px);
+		}
+		#select-world li {
+			background: #0008;
+			border: solid 5px #000c;
+			list-style: none;
+			padding: 20px;
+		}
+		#select-world li.selected {
+			background: #000c;
+			border-color: #000000e6;
+		}
+		a {
+			color: inherit;
+			text-decoration: inherit;
+		}
+		h1:not(#title), select-world #li, form {
+			zoom: var(--zoom);
+		}
+		input {
+			background: #0008;
+			border-color: #0008;
+			color: inherit;
+			font: inherit;
+		}
+		#canvas {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 3;
+		}
+	</style>
+</head>
+<body class="fullscreen">
+	<div id="main">
+		<h1 id="title">The Backrooms</h1>
+		<table id="menu">
+			<tbody>
+				<tr><td onclick="playSound('ui.click'); openWorldSelector()">Play</td></tr>
+				<tr><td onclick="playSound('ui.click'); openJoinMenu()">Join</td></tr>
+				<tr><td onclick="playSound('ui.click')"><a href="http://backrooms-wiki.wikidot.com/" target="_blank">Open Wiki</a></td></tr>
+				<tr><td onclick="playSound('ui.click'); openSettings()">Settings</td></tr>
+				<tr><td onclick="playSound('ui.click'); window.close()">Quit</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<div id="world-selector" class="fullscreen" style="display:none">
+		<h1>Select World</h1>
+		<form>
+			<label for="world-selector-local">Open to LAN</label>
+			<input id="world-selector-local" type="checkbox" onclick="playSound('ui.flick')" />
+			<br />
+			<label for="world-selector-port">Port</label>
+			<input id="world-selector-port" type="number" min="1" max="65535" step="1" placeholder="Random" onclick="playSound('ui.tick')" />
+		</form>
+		<hr />
+		<ul id="select-world"></ul>
+		<div class="button-row">
+			<button onclick="playSound('ui.click'); closeWorldSelector()">Cancel</button>
+			<button onclick="playSound('ui.click'); startServer(); closeWorldSelector()">Start</button>
+			<button onclick="playSound('ui.click'); openCreateWorldMenu()">New</button>
+		</div>
+	</div>
+	<div id="create-world" class="fullscreen" style="display:none">
+		<h1>Create World</h1>
+		<form>
+			<label for="create-world-name">Name</label>
+			<input id="create-world-name" type="text" maxlength="64" placeholder="My Backrooms" onclick="playSound('ui.tick')" />
+			<br />
+			<label for="create-world-hardcore">Hardcore</label>
+			<input type="checkbox" id="create-world-hardcore" onclick="playSound('ui.flick')" />
+			<br />
+			<label for="create-world-starter-kit">Starter Kit</label>
+			<input type="checkbox" id="create-world-starter-kit" onclick="playSound('ui.flick')" />
+			<br />
+			<label for="create-world-cheats">Cheats</label>
+			<input type="checkbox" id="create-world-cheats" onclick="playSound('ui.flick')" />
+			<br />
+			<label for="create-world-seed">Seed</label>
+			<input id="create-world-seed" type="text" maxlength="64" placeholder="Random" onclick="playSound('ui.tick')" />
+		</form>
+		<div class="button-row">
+			<button onclick="playSound('ui.click'); closeCreateWorldMenu()">Cancel</button>
+			<button onclick="playSound('ui.click'); createWorld(); closeCreateWorldMenu()">Create</button>
+		</div>
+	</div>
+	<div id="settings" class="fullscreen" style="display:none">
+		<h1>Settings</h1>
+		<form>
+			<label for="settings-zoom">Zoom</label>
+			<input id="settings-zoom" type="range" min="0.5" max="3" step="0.5" onclick="playSound('ui.tick')" onchange="saveSetting('zoom', this.value)" />
+			<br />
+			<label for="settings-volume">Volume</label>
+			<input id="settings-volume" type="range" min="0" max="1" step="0.01" onclick="playSound('ui.tick')" onchange="saveSetting('volume', this.value)" />
+			<br />
+			<label for="settings-playername">Player name</label>
+			<input id="settings-playername" type="text" maxlength="16" onclick="playSound('ui.tick')" onchange="saveSetting('playername', this.value)" />
+			<input type="button" value="Random" onclick="playSound('ui.click'); saveSetting('playername', document.getElementById('settings-playername').value = randomUsername())" />
+		</form>
+		<div class="button-row">
+			<button onclick="playSound('ui.click'); closeSettings()">Return to menu</button>
+		</div>
+	</div>
+	<div id="join-menu" class="fullscreen" style="display:none">
+		<h1>Join server</h1>
+		<form>
+			<input id="join-menu-server" type="text" onclick="playSound('ui.tick')" pattern="^((([0-1]?[0-9]?[0-9]?|2[0-4][0-9]|25[0-5])\.){3}([0-1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])|[a-zA-Z0-9\.-]+\.[a-zA-Z0-9]+|localhost):([1-5]?[0-9]?[0-9]?[0-9]?[0-9]|6[0-4][0-9][0-9][0-9]|65[0-4][0-9][0-9]|655[0-2][0-9]|6553[0-5])$" placeholder="192.168.1.255:10000" />
+			<p>
+				The server consists of two parts: the hostname and the port.
+				<br />
+				The hostname can be:
+				<ul>
+					<li>A website: <code>myserver.com</code></li>
+					<li>Localhost: <code>localhost</code></li>
+					<li>IP Address: <code>192.168.1.255</code></li>
+					<li>A subdomain: <code>play.myserver.com</code></li>
+				</ul>
+				And the port can be a number from 0 to 65536.
+			</p>
+			<p>
+				Valid examples:
+				<ul>
+					<li><code>192.168.1.193:5410</code></li>
+					<li><code>play.backroomsonline.com:8080</code></li>
+					<li><code>backroomsonline.io:3000</code></li>
+					<li><code>localhost:5000</code></li>
+				</ul>
+			</p>
+		</form>
+		<div class="button-row">
+			<button onclick="playSound('ui.click'); closeJoinMenu()">Cancel</button>
+			<button onclick="playSound('ui.click'); joinServer(); closeJoinMenu()">Join</button>
+		</div>
+	</div>
+	<canvas id="canvas" style="display:none"></canvas>
+</body>
+</html>

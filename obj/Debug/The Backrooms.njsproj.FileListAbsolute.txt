@@ -1,0 +1,3 @@
+C:\Nikola\Stuff\The Backrooms\obj\Debug\The Backrooms.njsproj.AssemblyReference.cache
+C:\Nikola\Stuff\The Backrooms\obj\Debug\The Backrooms.njsproj.CoreCompileInputs.cache
+C:\Nikola\Stuff\The Backrooms\bin\Microsoft.NodejsTools.WebRole.dll

@@ -1,0 +1,32 @@
+{
+  "name": "the-backrooms",
+  "version": "1.0.0",
+  "description": "If you no-clip out of reality, you'll end up here. Watch your step!",
+  "main": "app.js",
+  "scripts": {
+    "test": ".\\node_modules\\electron\\dist\\electron.exe ."
+  },
+  "keywords": [
+    "electron",
+    "javascript",
+    "js",
+    "game",
+    "html5game",
+    "backrooms",
+    "thebackrooms",
+    "3d",
+    "threejs",
+    "three"
+  ],
+  "author": "EntityPlantt",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "devDependencies": {
+    "electron": "^19.0.8",
+    "electron-packager": "^15.5.1",
+    "ip": "^1.1.8",
+    "tcp-port-used": "^1.0.2"
+  },
+  "dependencies": {
+    "unique-username-generator": "^1.1.1"
+  }
+}
